@@ -1,0 +1,29 @@
+.Navigation nav {
+  background-color: #0a6066;
+  color: #f1fff4;
+}
+
+.Navigation img.logo.d-inline-block.align-top {
+  background-color: #transparent;
+  margin-left: 5px;
+  padding: 10px;
+}
+
+.Navigation .navbar-brand {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.Navigation .blog-menu a {
+  color: #f0f0ef;
+  text-decoration: none;
+}
+.Navigation .blog-menu a:hover {
+  color: #5062cc;
+}
+
+.Content {
+  padding-top: 3rem;
+}
