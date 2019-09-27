@@ -1,0 +1,35 @@
+import React from 'react';
+<<<<<<< HEAD
+import { Route, Switch } from 'react-router-dom';
+
+import Layout from './layout'
+import Main from './pages/Main';
+
+const App = () => (
+  <div>
+    <Layout>
+      <Switch>
+        <Route path="/" exact component={Main} />
+      </Switch>
+    </Layout>
+  </div>
+=======
+import {Route, Switch} from 'react-router-dom';
+
+import Layout from './layout';
+import Main from './pages/Main';
+import Tasks from './pages/Tasks';
+
+const App = () => (
+    <div>
+        <Layout>
+            <Switch>
+                <Route path="/" exact component={Main}/>
+                <Route path="/tasks" exact component={Tasks}/>
+            </Switch>
+        </Layout>
+    </div>
+>>>>>>> auth-jwt
+);
+
+export default App;
