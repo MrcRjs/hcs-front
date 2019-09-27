@@ -1,22 +1,43 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+
+import AuthService from '../../services/AuthService';
+
 import './index.scss'
 
+const Auth = new AuthService();
 
-const Main = () => {
+
+const Main = props => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleEmailChange = emailText => setEmail(emailText.target.value);
     const handlePasswordChange = passwordText => setPassword(passwordText.target.value);
+
     const handleFormSubmit = formSubmitEvent => {
         formSubmitEvent.preventDefault();
         // Handle login
+        Auth.login( email, password)
+            .then(res =>{
+               props.history.replace('/tasks');
+            })
+            .catch(err => {
+                console.log(err);
+                alert(err);
+            })
     };
+
+    useEffect(() => {
+        if(Auth.loggedIn()){
+            props.history.replace('/tasks');
+        }
+    });
+
     return (
         <Container className={"Main container"}>
             <Row>
