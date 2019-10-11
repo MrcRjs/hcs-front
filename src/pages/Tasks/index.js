@@ -2,10 +2,8 @@ import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Fade from 'react-bootstrap/Fade'
 import Task from "./taskComponent";
 
 import AuthService from '../../services/AuthService';
@@ -15,11 +13,11 @@ const Tasks = props => {
 
     const Auth = new AuthService('http://localhost:8080/api');
 
-    const [taskList, setTaskList] = useState();
+    const [taskList, setTaskList] = useState(null);
     const [newTask, setNewTask] = useState('');
 
-    const handleTaskList = (tasklist) => {
-        setTaskList(tasklist);
+    const handleTaskList = (tl) => {
+        setTaskList(tl);
     };
 
     const handleOnChangeNewTask = (newDescription) => {
@@ -28,14 +26,14 @@ const Tasks = props => {
 
     const handleSubmitTask = async e => {
         e.preventDefault();
-        handleCreateNewTask();
+        return await handleCreateNewTask();
     };
 
     const handleCreateNewTask = async () => {
-        return Auth.fetch('/tasks', {"method": "POST", body: {title: newTask}})
+        return await Auth.fetch('/tasks', {"method": "POST", body: {title: newTask}})
             .then(res => {
                 setNewTask('');
-                setTaskList(res.tasks.reverse())
+                setTaskList(res.tasks.reverse());
             })
             .catch(e => {
                 console.log(e);
@@ -53,22 +51,40 @@ const Tasks = props => {
             });
     };
 
+    const handleEditTask = async (index, title) => {
+        return Auth.fetch('/tasks',{"method": "PATCH", body: {index, title}})
+            .then(res => {
+                setTaskList(res.tasks.reverse())
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    };
+
     useEffect(() => {
-        if (!taskList) {
-            Auth.fetch('/tasks', {"method": "GET"}).then(response => {
-                handleTaskList(response.tasks.reverse());
+        if(!Auth.loggedIn()){
+            props.history.replace('/');
+        }
+        else if (!taskList) {
+            Auth.fetch('/tasks', {"method": "GET"})
+                .then(res => {
+                handleTaskList(res.tasks.reverse());
+
+            }).catch(e => {
+                console.log(e);
             });
         }
     });
 
-    let Tasks;
+    let Tasks = null;
     if (!taskList) {
-        Tasks = [1, 2].map(i => <Fade appear in key={i}><Card bg={'light'} text="muted" style={{marginBottom: '1rem'}}>
-            <Card.Header>{"..."}</Card.Header><Card.Body/></Card></Fade>);
-    } else if (taskList.length === 0)
-        Tasks = <Container variant={"success"}><p className={'text-muted'}>You don't have any tasks, create one!</p></Container>;
+        Tasks = [1, 2].map(i => <Task key={i} loading/>);
+    } else if (taskList.length === 0) {
+        Tasks = <Container variant={"success"}><p className={'text-muted'}>You don't have any tasks, create one!</p>
+        </Container>;
+    }
     else {
-        Tasks = taskList.map((t, i) => <Task key={i} task={t} handleDeleteTask = {handleDeleteTask}/>);
+        Tasks = taskList.map((t) => <Task key={t._id} task={t} handleDeleteTask = {handleDeleteTask} handleEditTask={handleEditTask}/>);
     }
     return (
         <Container className={"Tasks"}>

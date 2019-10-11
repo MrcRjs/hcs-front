@@ -11,12 +11,12 @@ export default class AuthService {
 
     login(email, password) {
         // Get a token from api server using the fetch api
-        return this.fetch(`${this.domain}/login`, {
+        return this.fetch(`/login`, {
             method: 'POST',
-            body: JSON.stringify({
+            body: {
                 email,
                 password
-            })
+            }
         }).then(res => {
             this.setToken(res.token); // Setting the token in localStorage
             return Promise.resolve(res);
