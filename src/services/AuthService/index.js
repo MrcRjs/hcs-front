@@ -72,8 +72,15 @@ export default class AuthService {
             headers['Authorization'] = 'Bearer ' + this.getToken()
         }
 
-        return fetch(url, {
+        console.log(options.method + " " + url );
+
+         if(options.body){
+             options.body = JSON.stringify(options.body);
+         }
+
+        return fetch(`${this.domain}${url}`, {
             headers,
+            'mode': 'cors',
             ...options
         })
             .then(this._checkStatus)
