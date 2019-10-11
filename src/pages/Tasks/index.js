@@ -29,16 +29,24 @@ const Tasks = props => {
     const handleCreateNewTask = async () => {
         return Auth.fetch('/tasks', {"method": "POST", body: {title: newTask}})
             .then(res => {
-                console.log(res);
                 setNewTask('');
+                setTaskList(res.tasks.reverse())
+            })
+            .catch(e => {
+                console.log(e);
+                setNewTask('');
+            });
+    };
+
+    const handleDeleteTask = async (index) => {
+        return Auth.fetch('/tasks',{"method": "DELETE", body: {index}})
+            .then(res => {
                 setTaskList(res.tasks.reverse())
             })
             .catch(e => {
                 console.log(e);
             });
     };
-
-    const handle
 
     useEffect(() => {
         if (!taskList) {
@@ -51,9 +59,9 @@ const Tasks = props => {
     let Tasks;
     if (!taskList) {
         Tasks = [1, 2].map(i => <Fade appear in key={i}><Card bg={'light'} text="muted" style={{marginBottom: '1rem'}}>
-            <Card.Header>{"..."}</Card.Header><Card.Body></Card.Body></Card></Fade>);
+            <Card.Header>{"..."}</Card.Header><Card.Body/></Card></Fade>);
     } else if (taskList.length === 0)
-        Tasks = <Container variant={"success"}><p>You don't have any tasks, create one!</p></Container>;
+        Tasks = <Container variant={"success"}><p className={'text-muted'}>You don't have any tasks, create one!</p></Container>;
     else {
         Tasks = taskList.map((t, i) => {
             return (
@@ -63,7 +71,7 @@ const Tasks = props => {
                             {new Date(t.created).toLocaleString()}
                             <ButtonGroup aria-label="Basic example">
                                 <Button size={'sm'} variant="outline-primary">Edit</Button>
-                                <Button size={'sm'} variant="outline-danger">Delete</Button>
+                                <Button size={'sm'} variant="outline-danger" onClick={ () => handleDeleteTask(t._id)} >Delete</Button>
                             </ButtonGroup>
                         </Row>
                     </Card.Header>
