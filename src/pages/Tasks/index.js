@@ -25,10 +25,11 @@ const Tasks = props => {
     };
 
     const handleCreateNewTask = async() => {
-        return Auth.fetch('/tasks', {"method": "POST", "body": {title: newTask}})
+        return Auth.fetch('/tasks', {"method": "POST", body: {title: newTask}})
             .then(res => {
                 console.log(res);
                 setNewTask('');
+                setTaskList(res.tasks)
             })
             .catch(e => {
                 console.log(e);

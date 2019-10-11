@@ -63,7 +63,7 @@ export default class AuthService {
         // performs api calls sending the required authentication headers
         const headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         };
 
         // Setting Authorization header
@@ -71,12 +71,17 @@ export default class AuthService {
         if (this.loggedIn()) {
             headers['Authorization'] = 'Bearer ' + this.getToken()
         }
+
         console.log(options.method + " " + url );
+
+         if(options.body){
+             options.body = JSON.stringify(options.body);
+         }
+
         return fetch(`${this.domain}${url}`, {
             headers,
             'mode': 'cors',
-            ...options,
-            body: JSON.stringify(options.body)
+            ...options
         })
             .then(this._checkStatus)
             .then(response => response.json())
