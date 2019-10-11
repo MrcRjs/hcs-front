@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Fade from 'react-bootstrap/Fade'
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Task from "./taskComponent";
 
 import AuthService from '../../services/AuthService';
 
@@ -68,21 +68,7 @@ const Tasks = props => {
     } else if (taskList.length === 0)
         Tasks = <Container variant={"success"}><p className={'text-muted'}>You don't have any tasks, create one!</p></Container>;
     else {
-        Tasks = taskList.map((t, i) => {
-            return (
-                <Fade appear in key={t._id}><Card bg={'light'} style={{marginBottom: '1rem'}}>
-                    <Card.Header>
-                        <Row className="justify-content-between align-items-center">
-                            {new Date(t.created).toLocaleString()}
-                            <ButtonGroup aria-label="Basic example">
-                                <Button size={'sm'} variant="outline-primary">Edit</Button>
-                                <Button size={'sm'} variant="outline-danger" onClick={ () => handleDeleteTask(t._id)} >Delete</Button>
-                            </ButtonGroup>
-                        </Row>
-                    </Card.Header>
-                    <Card.Body><Card.Text text={'primary'}><strong>{t.title}</strong></Card.Text></Card.Body>
-                </Card></Fade>);
-        });
+        Tasks = taskList.map((t, i) => <Task key={i} task={t} handleDeleteTask = {handleDeleteTask}/>);
     }
     return (
         <Container className={"Tasks"}>
