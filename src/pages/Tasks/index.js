@@ -26,6 +26,11 @@ const Tasks = props => {
         setNewTask(newDescription.target.value);
     };
 
+    const handleSubmitTask = async e => {
+        e.preventDefault();
+        handleCreateNewTask();
+    };
+
     const handleCreateNewTask = async () => {
         return Auth.fetch('/tasks', {"method": "POST", body: {title: newTask}})
             .then(res => {
@@ -83,7 +88,7 @@ const Tasks = props => {
         <Container className={"Tasks"}>
             <Row>
                 <Col sm={12} md={{span: 6, offset: 3}}>
-                    <Form>
+                    <Form onSubmit={ handleSubmitTask }>
                         <Form.Group>
                             <Form.Label><strong>Create new task</strong></Form.Label>
 
