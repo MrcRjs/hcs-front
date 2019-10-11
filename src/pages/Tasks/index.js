@@ -38,6 +38,7 @@ const Tasks = props => {
             });
     };
 
+    const handle
 
     useEffect(() => {
         if (!taskList) {
@@ -74,20 +75,18 @@ const Tasks = props => {
         <Container className={"Tasks"}>
             <Row>
                 <Col sm={12} md={{span: 6, offset: 3}}>
-
-                    {Tasks}
-                    <hr/>
                     <Form>
                         <Form.Group>
-                            <Form.Label>Create new task</Form.Label>
+                            <Form.Label><strong>Create new task</strong></Form.Label>
 
                             <Form.Control type="text" placeholder="Task description" value={newTask}
                                           onChange={handleOnChangeNewTask}/>
-
                         </Form.Group>
 
                         <Button variant="outline-primary" onClick={handleCreateNewTask}>Create task</Button>
                     </Form>
+                    <hr/>
+                    {Tasks}
                 </Col>
             </Row>
         </Container>
